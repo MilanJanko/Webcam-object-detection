@@ -1,12 +1,15 @@
 import cv2
 import time
+from send_email import send_email
 
 video = cv2.VideoCapture(0)
 time.sleep(1)
 
 first_frame = None
+object_status = []
 
 while True:
+    status = 0
     checker, frame = video.read()
 
     # Convert frame into gray color for less memory consumption
@@ -35,7 +38,17 @@ while True:
         if cv2.contourArea(contour) < 5000:
             continue
         x, y, w, h = cv2.boundingRect(contour)
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 3)
+        rectangle = cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 3)
+        # Change variable status if there is an object
+        if rectangle.any():
+            status = 1
+
+    # Check if there is 1 to 0 change in the list - means object left the camera
+    object_status.append(status)
+    object_status = object_status[-2:]
+
+    if object_status[0] == 1 and object_status[1] == 0:
+        send_email()
 
     cv2.imshow('Video', frame)
 
