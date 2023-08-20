@@ -1,12 +1,14 @@
 import cv2
 import time
 from send_email import send_email
+import glob
 
 video = cv2.VideoCapture(0)
 time.sleep(1)
 
 first_frame = None
 object_status = []
+count = 1
 
 while True:
     status = 0
@@ -42,6 +44,11 @@ while True:
         # Change variable status if there is an object
         if rectangle.any():
             status = 1
+            cv2.imwrite(f'images/{count}.png', frame)
+            count += 1
+            all_images = glob.glob('images/*.png')
+            middle_index = int(len(all_images)/2)
+            image_with_object = all_images[middle_index]
 
     # Check if there is 1 to 0 change in the list - means object left the camera
     object_status.append(status)
