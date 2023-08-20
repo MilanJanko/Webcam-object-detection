@@ -55,7 +55,7 @@ while True:
     object_status = object_status[-2:]
 
     if object_status[0] == 1 and object_status[1] == 0:
-        send_email()
+        send_email(image_with_object)
 
     cv2.imshow('Video', frame)
 
