@@ -4,13 +4,13 @@ import imghdr
 from envvar import username, password, receiver
 
 
-def send_email(image):
+def send_email(image_path):
     email_message = EmailMessage()
     email_message['Subject'] = 'New Object showed up!'
     email_message.set_content('Your webcam detected new object, '
                               'attached in the email below.')
 
-    with open(image, 'rb') as file:
+    with open(image_path, 'rb') as file:
         content = file.read()
 
     email_message.add_attachment(content, maintype='image',
@@ -25,5 +25,5 @@ def send_email(image):
 
 
 if __name__ == '__main__':
-    send_email()
+    send_email("images/19.png")
 
